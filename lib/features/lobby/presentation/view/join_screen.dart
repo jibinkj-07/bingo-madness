@@ -62,7 +62,7 @@ class _JoinScreenState extends State<JoinScreen> {
                 const CustomAppBar(title: 'Join Game'),
                 Expanded(
                   child: ListView(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.only(bottom: 30.0),
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(20.0),
