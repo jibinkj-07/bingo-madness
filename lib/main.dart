@@ -31,6 +31,7 @@ Future<void> main() async {
 ValueNotifier<AudioPlayer> generalButtonSound = ValueNotifier(AudioPlayer());
 ValueNotifier<AudioPlayer> victorySound = ValueNotifier(AudioPlayer());
 ValueNotifier<AudioPlayer> failedSound = ValueNotifier(AudioPlayer());
+ValueNotifier<AudioPlayer> matrixButtonSound = ValueNotifier(AudioPlayer());
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -51,6 +52,9 @@ class _MyAppState extends State<MyApp> {
     failedSound.value.setReleaseMode(ReleaseMode.stop);
     failedSound.value.setSourceAsset("sounds/failed.mp3");
 
+    matrixButtonSound.value.setReleaseMode(ReleaseMode.stop);
+    matrixButtonSound.value.setSourceAsset("sounds/button_click.mp3");
+
     super.initState();
   }
 
@@ -59,6 +63,7 @@ class _MyAppState extends State<MyApp> {
     generalButtonSound.value.dispose();
     victorySound.value.dispose();
     failedSound.value.dispose();
+    matrixButtonSound.value.dispose();
     super.dispose();
   }
 

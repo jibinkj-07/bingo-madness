@@ -39,7 +39,10 @@ class MessageBox extends StatelessWidget {
       child: gameModel.message.isEmpty
           ? const Text(
               "Messages will show here",
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Colors.black54,
+              ),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,

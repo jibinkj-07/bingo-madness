@@ -266,7 +266,7 @@ class GameOperations {
       return "";
     } catch (e) {
       log("Error [acceptReMatch] $e");
-      return "Unable to accept re- match. Try again";
+      return "Unable to accept re-match. Try again";
     }
   }
 

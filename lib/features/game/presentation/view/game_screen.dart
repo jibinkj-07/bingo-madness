@@ -30,7 +30,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     _gameModel.dispose();
-    if (_gameModel.value != null) {
+    if (_gameModel.value != null && _gameModel.value!.winner.isEmpty) {
       GameOperations.exitMatch(
         roomId: _gameModel.value!.roomId,
         isHost: widget.playerName == _gameModel.value!.hostName,

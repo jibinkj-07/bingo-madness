@@ -36,8 +36,11 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  String _message = "";
+
   @override
   void initState() {
+    _message = getRandomQuote();
     Future.delayed(const Duration(milliseconds: 300), () {
       if (widget.isSound) {
         widget.isSuccess
@@ -50,105 +53,137 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GameBG(
-      topBarChild: const SizedBox.shrink(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(20.0),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-              border: Border.all(width: 5, color: Colors.amber.shade800),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.amber.shade50,
-                  Colors.amber.shade200,
+    return PopScope(
+      canPop: false,
+      child: GameBG(
+        topBarChild: const SizedBox.shrink(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(20.0),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                border: Border.all(width: 5, color: Colors.amber.shade800),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.amber.shade50,
+                    Colors.amber.shade200,
+                  ],
+                  begin: AlignmentDirectional.topCenter,
+                  end: AlignmentDirectional.bottomCenter,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 20.0,
+                    spreadRadius: 5.0,
+                  ),
                 ],
-                begin: AlignmentDirectional.topCenter,
-                end: AlignmentDirectional.bottomCenter,
               ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 20.0,
-                  spreadRadius: 5.0,
-                ),
-              ],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Lottie.asset(
+                    widget.isSuccess
+                        ? "assets/animations/party.json"
+                        : "assets/animations/lose.json",
+                  ),
+                  Image.asset(widget.isSuccess
+                      ? "assets/images/victory.png"
+                      : "assets/images/lose.png"),
+                  Text(
+                    widget.isSuccess ? _message : "Never give up",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 30.0),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Lottie.asset(
-                  widget.isSuccess
-                      ? "assets/animations/party.json"
-                      : "assets/animations/lose.json",
-                ),
-                Image.asset(widget.isSuccess
-                    ? "assets/images/victory.png"
-                    : "assets/images/lose.png"),
-                Text(
-                  widget.isSuccess ? getRandomQuote() : "Never give up",
-                  style: const TextStyle(
+            if (widget.playerName == widget.hostName)
+              AnimatedButton(
+                height: 50.0,
+                title: const Text(
+                  "Match again",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 30.0),
-              ],
-            ),
-          ),
-          AnimatedButton(
-            height: 50.0,
-            title: Text(
-              widget.isReplay ? "Accept re-Match" : "Match again",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              Provider.of<GameProvider>(context, listen: false).resetMatrix();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (_) => ReMatchScreen(
-                    sendingInvite: !widget.isReplay,
-                    playerName: widget.playerName,
-                    roomId: widget.roomId,
                   ),
                 ),
-              );
-            },
-            isBoxShadow: true,
-            bgColor: Colors.blue,
-          ),
-          const SizedBox(height: 15.0),
-          AnimatedButton(
-            width: 120,
-            height: 50.0,
-            title: const Text(
-              "Exit",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+                onPressed: () {
+                  Provider.of<GameProvider>(context, listen: false)
+                      .resetMatrix();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => ReMatchScreen(
+                        sendingInvite: true,
+                        playerName: widget.playerName,
+                        roomId: widget.roomId,
+                      ),
+                    ),
+                  );
+                },
+                isBoxShadow: true,
+                bgColor: Colors.blue,
               ),
+            if (widget.playerName != widget.hostName && widget.isReplay)
+              AnimatedButton(
+                height: 50.0,
+                title: const Text(
+                  "Accept Re-match",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  Provider.of<GameProvider>(context, listen: false)
+                      .resetMatrix();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => ReMatchScreen(
+                        sendingInvite: false,
+                        playerName: widget.playerName,
+                        roomId: widget.roomId,
+                      ),
+                    ),
+                  );
+                },
+                isBoxShadow: true,
+                bgColor: Colors.blue,
+              ),
+            const SizedBox(height: 15.0),
+            AnimatedButton(
+              width: 120,
+              height: 50.0,
+              title: const Text(
+                "Exit",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Provider.of<GameProvider>(context, listen: false).resetMatrix();
+                GameOperations.exitMatch(
+                  roomId: widget.roomId,
+                  isHost: widget.playerName == widget.hostName,
+                );
+                Navigator.pop(context);
+              },
+              isBoxShadow: true,
+              bgColor: Colors.red,
             ),
-            onPressed: () {
-              Provider.of<GameProvider>(context, listen: false).resetMatrix();
-              GameOperations.exitMatch(
-                roomId: widget.roomId,
-                isHost: widget.playerName == widget.hostName,
-              );
-              Navigator.pop(context);
-            },
-            isBoxShadow: true,
-            bgColor: Colors.red,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

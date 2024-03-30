@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/util/helper/matrix_operations.dart';
+import '../../../../../main.dart';
 import '../../../../lobby/presentation/provider/game_provider.dart';
 import '../../../../lobby/presentation/view_model/game_operations.dart';
 import '../../../../settings/presentation/provider/setting_provider.dart';
@@ -13,7 +14,7 @@ import '../../../../settings/presentation/provider/setting_provider.dart';
 /// @date   : 28/03/2024
 /// @time   : 14:07:33
 
-class MatrixBox extends StatefulWidget {
+class MatrixBox extends StatelessWidget {
   final GameModel gameModel;
   final String player;
 
@@ -22,26 +23,6 @@ class MatrixBox extends StatefulWidget {
     required this.gameModel,
     required this.player,
   });
-
-  @override
-  State<MatrixBox> createState() => _MatrixBoxState();
-}
-
-class _MatrixBoxState extends State<MatrixBox> {
-  final _player = AudioPlayer();
-
-  @override
-  void initState() {
-    _player.setReleaseMode(ReleaseMode.stop);
-    _player.setSourceAsset("sounds/button_click.mp3");
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _player.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,33 +81,35 @@ class _MatrixBoxState extends State<MatrixBox> {
                     onPressed: allStruck
                         ? null
                         : () {
-                            if (GameOperations.isMyTurn(
-                                widget.gameModel, widget.player)) {
+                            if (GameOperations.isMyTurn(gameModel, player)) {
                               final provider = Provider.of<SettingProvider>(
                                   context,
                                   listen: false);
                               if (provider.appSound) {
-                                _player.resume();
+                                matrixButtonSound.value.resume();
                               }
                               HapticFeedback.mediumImpact();
                               GameOperations.strikeElement(
                                 element: gameProvider.gameMatrix[row][col],
-                                player: widget.player,
-                                roomId: widget.gameModel.roomId,
-                                struckList: widget.gameModel.struckNumbers,
+                                player: player,
+                                roomId: gameModel.roomId,
+                                struckList: gameModel.struckNumbers,
                               );
                             }
                           },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
-                      backgroundColor: GameOperations.isStruck(
-                        widget.gameModel.struckNumbers,
-                        gameProvider.gameMatrix[row][col],
-                      )
-                          ? Colors.blue
-                          : null,
+                      backgroundColor: gameModel.currentNumber ==
+                              gameProvider.gameMatrix[row][col]
+                          ? Colors.amber.shade700
+                          : GameOperations.isStruck(
+                              gameModel.struckNumbers,
+                              gameProvider.gameMatrix[row][col],
+                            )
+                              ? Colors.blue
+                              : null,
                       foregroundColor: GameOperations.isStruck(
-                        widget.gameModel.struckNumbers,
+                        gameModel.struckNumbers,
                         gameProvider.gameMatrix[row][col],
                       )
                           ? Colors.white
