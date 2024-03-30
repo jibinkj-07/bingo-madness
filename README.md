@@ -2,6 +2,12 @@
 
 Discover the Bingo Madness project repository, dedicated to bringing back the beloved childhood bingo game. Experience the excitement and nostalgia of bingo in a modern twist. Join us for a journey of fun and memories! 🎉
 
+[![Button Shield]][Shield] 
+
+[Button Shield]: https://user-images.githubusercontent.com/71382920/209852897-dda0c0c3-58c6-4fcc-8a19-0ca9a95063da.png
+
+[Shield]: https://drive.google.com/file/d/1c2zGzqxWv5zPqa_iTVEXUATLGKwWwv0K/view?usp=sharing
+
 ## Features
 
 - **Multiplayer** : Connect and play with other friends via internet
