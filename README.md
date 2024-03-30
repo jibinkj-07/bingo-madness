@@ -1,6 +1,6 @@
 # Bingo Madness
 
-Welcome to Bingo Madness project repository. This project is designed to make childhood bingo game
+Discover the Bingo Madness project repository, dedicated to bringing back the beloved childhood bingo game. Experience the excitement and nostalgia of bingo in a modern twist. Join us for a journey of fun and memories! 🎉
 
 ## Features
 
